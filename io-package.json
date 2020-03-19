@@ -1,0 +1,94 @@
+{
+    "common": {
+        "name": "batteryload",
+        "version": "0.0.1",
+        "news": {
+            "0.0.1": {
+                "en": "initial release",
+                "de": "Erstveröffentlichung",
+                "ru": "Начальная версия",
+                "pt": "lançamento inicial",
+                "nl": "Eerste uitgave",
+                "fr": "Première version",
+                "it": "Versione iniziale",
+                "es": "Versión inicial",
+                "pl": "Pierwsze wydanie",
+                "zh-cn": "首次出版"
+            }
+        },
+        "title": "BatteryLoad",
+        "titleLang": {
+            "en": "BatteryLoad",
+            "de": "Batterieladung",
+            "ru": "BatteryLoad",
+            "pt": "BatteryLoad",
+            "nl": "BatteryLoad",
+            "fr": "BatteryLoad",
+            "it": "BatteryLoad",
+            "es": "Batería",
+            "pl": "BatteryLoad",
+            "zh-cn": "电池负载"
+        },
+        "desc": {
+            "en": "read batt level of sensors",
+            "de": "Batt Level der Sensoren lesen",
+            "ru": "читать уровень заряда датчиков",
+            "pt": "leia o nível de batt de sensores",
+            "nl": "lees batt-niveau van sensoren",
+            "fr": "lire le niveau des capteurs",
+            "it": "leggi il livello di batt dei sensori",
+            "es": "leer el nivel de batería de los sensores",
+            "pl": "odczytać poziom czujników",
+            "zh-cn": "读取传感器的电池电量"
+        },
+        "authors": [
+            "liv-in-sky <liv-in-sky@online.de>"
+        ],
+        "keywords": [
+            "batt",
+            "sensors"
+        ],
+        "license": "MIT",
+        "platform": "Javascript/Node.js",
+        "main": "main.js",
+        "icon": "batteryload.png",
+        "enabled": true,
+        "extIcon": "https://raw.githubusercontent.com/liv-in-sky/ioBroker.batteryload/master/admin/batteryload.png",
+        "readme": "https://github.com/liv-in-sky/ioBroker.batteryload/blob/master/README.md",
+        "loglevel": "info",
+        "mode": "daemon",
+        "type": "general",
+        "compact": true,
+        "connectionType": "local",
+        "dataSource": "poll",
+        "materialize": true,
+        "dependencies": [
+            {
+                "js-controller": ">=1.4.2"
+            }
+        ]
+    },
+    "native": {
+        "option1": true,
+        "option2": "42"
+    },
+    "objects": [],
+    "instanceObjects": [
+        {
+            "_id": "Groups",
+            "type": "channel",
+            "common": {
+                "name": "Test"
+            },
+            "native": { }
+        },
+        {
+            "_id": "Groups.1",
+            "type": "state",
+            "common": {
+                "name": "Test"
+            },
+            "native": { }
+        }
+    ]
+}
