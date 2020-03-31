@@ -69,6 +69,8 @@
             <ul class="tabs">
                 <li class="tab col s2"><a href="#tab-settings" class="translate active">settings</a></li>
                 <li class="tab col s2"><a href="#tab-devices"  class="translate">devices</a></li>
+                <li class="tab col s2"><a href="#tab-layout"  class="translate">layout</a></li>
+
             </ul>
         </div>
         <div id="tab-settings"      class="col s12 page">
@@ -76,10 +78,34 @@
                 <div class="col s12 m4 l2">
                     <img src="batteryload.png" class="logo">
                 </div>
+
+                <!--
+                    var bigBattAlarm=3.7; var bigBattWarn=4.1; //WICHTIG bei bigAlarm nicht unter 3.3 gehen !!!!!!!!
+
+ 
+
+                var symbolOK="✅";  // auch möglich: ="🟢"}      
+
+                var symbolKO="❌";     //z.b. auch "<font color=\"red\"><b>X</b>" für ein rotes kreuz oder : ="🔴"  ⚪  ⚫ ⭕  🔴 🔵 ⏱ 💀 👍 👎 📑 💲 👀 ⛔
+
+                var symbolWARN="⚠️";    // ="🟡"
+
+ 
+
+                    var filterArray=["mihome.5.devices.plug_158d0001f24aad.percent"]; //hier den ganzenpfad von ungewünschten LOW_BAT werten eingeben - diese werden dann gefiltert
+
+                               // BEISPIEL var filterArray=["hm-rpc.0.LEQ0242145.0.LOWBAT", "hm-rpc.0.LEQ0242152.0.LOWBAT","hm-rpc.1.OEQ0473764.0.LOWBAT"];
+
+l
+                -->
+
             </div>
         
         </div> 
         <div id="tab-devices"      class="col s12 page">
+            <div class="col s12">
+                <h6 class="title translate" data-lang="chooseDevices">ChooseDevices</h6>
+            </div>
             <div class="row">
                 <div class="col s12 m4 l2">
                     <img src="./img/tradfri.png" class="data-icon">
@@ -174,6 +200,100 @@
                     <span for="fullyBrowser" class="translate">Fully Browser</span>
                 </div>
             </div>
+        </div> 
+        <div id="tab-layout"      class="col s12 page">
+            <div class="row">
+                <!--
+//HIER DIE SPALTEN ANZAHL DEFINIEREN - jede Spalte einen Wert - in diesem Beispiel sind es 3
+
+var htmlFeld1='Device';      var Feld1lAlign="left";                     // überschrift Tabellen Spalte1 und  Ausrichtung left,right or center
+
+var htmlFeld2='Wert';        var Feld2lAlign="center";                      // überschrift Tabellen Spalte2 und  Ausrichtung left,right or center
+
+var htmlFeld3='Status';         var Feld3lAlign="center";                    // überschrift Tabellen Spalte3 und  Ausrichtung left,right or center
+
+//-----------------------------------
+//ÜBERSCHRIFT ÜBER TABELLE
+
+
+let   htmlUberschrift=true;                           // mit Überschrift über der tabelle
+
+let   htmlSignature=false;                              // anstatt der Überscghrift eine signature: - kleiner - anliegend
+
+const htmlFeldUeber='Batterie Zustand Sensoren';              // Überschrift und Signature
+
+const htmlFarbUber="white";                         // Farbe der Überschrift
+
+const htmlSchriftWeite="normal";                       // bold, normal - Fettschrift für Überschrift
+
+const htmlÜberFontGroesse="22px";                       // schriftgröße überschrift
+
+//MEHRERE TABELLEN NEBENEINANDER
+
+let   mehrfachTabelle=3;                              // bis zu 4 Tabellen werden nebeneinander geschrieben-  verkürzt das Ganze, dafür etwas breiter - MÖGLICH 1,2,3,oder 4 !!!
+
+const trennungsLinie="2";                             //extra trennungslinie bei mehrfachtabellen - evtl auf 0 stellen, wnn htmlRahmenLinien auf none sind
+
+const farbetrennungsLinie="white";
+
+const htmlFarbZweiteTabelle="white";                // Farbe der Überschrift bei jeder 2.ten Tabelle
+
+const htmlFarbTableColorUber="#BDBDBD";               // Überschrift in der tabelle - der einzelnen Spalten
+
+//ÜBERSCHRIFT SPALTEN
+
+const UeberSchriftHöhe="35";                          //Überschrift bekommt mehr Raum - darunter und darüber - Zellenhöhe
+
+const LinieUnterUeberschrift="3";                   // Linie nur unter Spaltenüberschrift - 
+
+const farbeLinieUnterUeberschrift="white";
+
+const groesseUeberschrift=20;
+
+const UeberschriftStyle="normal"                     // möglich "bold"
+
+//GANZE TABELLE
+
+let abstandZelle="3";
+
+let farbeUngeradeZeilen="#000000";                     //Farbe für ungerade Zeilenanzahl - Hintergrund der Spaltenüberschrift bleibt bei htmlFarbTableColorGradient1/2
+
+let farbeGeradeZeilen="#151515";                        //Farbe für gerade Zeilenanzahl - Hintergrund der Spaltenüberschrift bleibt bei htmlFarbTableColorGradient1/2
+
+let weite="auto";                                     //Weite der Tabelle
+
+let zentriert=true;                                   //ganze tabelle zentriert
+
+const backgroundAll="#000000";                        //Hintergrund für die ganze Seite - für direkten aufruf oder iqontrol sichtber - keine auswirkung auf vis-widget
+
+const htmlSchriftart="RobotoCondensed-Regular"  //"Helvetica";
+
+const htmlSchriftgroesse="18px";
+
+//FELDER UND RAHMEN
+
+let   UeberschriftSpalten=true;                // ein- oder ausblenden der spatlen-überschriften
+
+const htmlFarbFelderschrift="#6E6E6E";                  // SchriftFarbe der Felder
+
+const htmlFarbFelderschrift2="#585858";                 // SchriftFarbe der Felder für jede 2te Tabelle
+
+const htmlFarbTableColorGradient1="#424242";          //  Gradient - Hintergrund der Tabelle - Verlauffarbe
+
+const htmlFarbTableColorGradient2="#424242";          //  Gradient - Hintergrund der Tabelle - ist dieser Wert gleich Gradient1 gibt es keinen verlauf
+
+const htmlFarbTableBorderColor="grey";             // Farbe des Rahmen - is tdieser gleich den gradienten, sind die rahmen unsichtbar
+
+let htmlRahmenLinien="rows";                            // Format für Rahmen: MÖGLICH: "none" oder "all" oder "cols" oder "rows"
+
+const htmlSpalte1Weite="auto";                   //  Weite der ersten beiden  Spalten oder z.b. 115px
+
+ 
+
+
+                    -->
+            </div>
+        
         </div> 
     </div>
 </div>
