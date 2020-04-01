@@ -20,24 +20,6 @@
     <script type="text/javascript">
         // This will be called by the admin adapter when the settings page loads
         function load(settings, onChange) {
-            // example: select elements with id=key and class=value and insert value
-            if (!settings) return;
-            $('.value').each(function () {
-                var $key = $(this);
-                var id = $key.attr('id');
-                if ($key.attr('type') === 'checkbox') {
-                    // do not call onChange direct, because onChange could expect some arguments
-                    $key.prop('checked', settings[id])
-                        .on('change', () => onChange())
-                        ;
-                } else {
-                    // do not call onChange direct, because onChange could expect some arguments
-                    $key.val(settings[id])
-                        .on('change', () => onChange())
-                        .on('keyup', () => onChange())
-                        ;
-                }
-            });
             onChange(false);
             // reinitialize all the Materialize labels on the page if you are dynamically adding inputs:
             if (M) M.updateTextFields();
@@ -45,16 +27,8 @@
 
         // This will be called by the admin adapter when the user presses the save button
         function save(callback) {
-            // example: select elements with class=value and build settings object
             var obj = {};
-            $('.value').each(function () {
-                var $this = $(this);
-                if ($this.attr('type') === 'checkbox') {
-                    obj[$this.attr('id')] = $this.prop('checked');
-                } else {
-                    obj[$this.attr('id')] = $this.val();
-                }
-            });
+
             callback(obj);
         }
     </script>
@@ -78,27 +52,58 @@
                 <div class="col s12 m4 l2">
                     <img src="batteryload.png" class="logo">
                 </div>
-
-                <!--
-                    var bigBattAlarm=3.7; var bigBattWarn=4.1; //WICHTIG bei bigAlarm nicht unter 3.3 gehen !!!!!!!!
-
- 
-
-                var symbolOK="✅";  // auch möglich: ="🟢"}      
-
-                var symbolKO="❌";     //z.b. auch "<font color=\"red\"><b>X</b>" für ein rotes kreuz oder : ="🔴"  ⚪  ⚫ ⭕  🔴 🔵 ⏱ 💀 👍 👎 📑 💲 👀 ⛔
-
-                var symbolWARN="⚠️";    // ="🟡"
-
- 
-
-                    var filterArray=["mihome.5.devices.plug_158d0001f24aad.percent"]; //hier den ganzenpfad von ungewünschten LOW_BAT werten eingeben - diese werden dann gefiltert
-
-                               // BEISPIEL var filterArray=["hm-rpc.0.LEQ0242145.0.LOWBAT", "hm-rpc.0.LEQ0242152.0.LOWBAT","hm-rpc.1.OEQ0473764.0.LOWBAT"];
-
-l
-                -->
-
+            </div>
+            <div class="row">
+                <div class="input-field col s12 m4 l2 ">
+                    <select class="value " id="symbolOK">
+                        <option value="✅" selected>✅</option>                
+                        <option value="🟢" >🟢</option>
+                        <option value="👍" >👍</option>
+                    </select>
+                    <label class="translate" for="symbolOK">symbolOK</label>
+                </div>
+                <div class="input-field col s12 m4 l2 ">
+                    <select class="value " id="symbolWARN" type="text">
+                        <option value="⚠️" selected >⚠️</option>                
+                        <option value="🟡" >🟡</option>
+                    </select>
+                    <label class="translate" for="symbolWARN">symbolWarn</label>
+                </div>
+                <div class="input-field col s12 m4 l2 ">
+                    <select class="value " id="symbolKO" type="text">
+                        <option value="❌" selected class="translate">❌</option>                
+                        <option value="🔴">🔴</option>
+                        <option value="⚪" >⚪</option>
+                        <option value="⚫" >⚫</option>
+                        <option value="⭕" >⭕</option>
+                        <option value="🔴" >🔴</option>
+                        <option value="🔵" >🔵</option>
+                        <option value="⏱" >⏱</option>
+                        <option value="💀" >💀</option>
+                        <option value="👍">👍</option>
+                        <option value="👎">👎</option>
+                        <option value="📑" >📑</option>
+                        <option value="💲" >💲</option>
+                        <option value="👀" >👀</option>
+                        <option value="⛔" >⛔</option>
+                    </select>
+                    <label class="translate" for="symbolKO">symbolKO</label>
+                </div>   
+            </div>
+            <div class="row">
+                <div class="input-field">
+                    <input class="value" id="filterArray" type="text" />
+                    <label class="translate" for="filterArray">filterArray</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12 m4 l2 ">
+                    <select class="value " id="bigBattAlarm">
+                        <option value="3.7" selected>3.7</option>                
+                        <option value="4.1" >4.1</option>
+                    </select>
+                    <label class="translate" for="bigBattAlarm">bigBattAlarm</label>
+                </div>
             </div>
         
         </div> 
@@ -202,15 +207,73 @@ l
             </div>
         </div> 
         <div id="tab-layout"      class="col s12 page">
+            <div class="col s12">
+                <h6 class="title translate" data-lang="defineColoumns">defineColoumns</h6>
+            </div>
             <div class="row">
+                <div class="input-field col s12 m4 l2 ">
+                    <select class="value " id="htmlFeld1">
+                        <option value="Device" class = "translate" >Device</option>                
+                        <option value="Wert" class = "translate">Wert</option>
+                        <option value="Status" class = "translate">Status</option>
+                    </select>
+                    <label class="translate" for="htmlFeld1">htmlFeld1</label>
+                </div>
+                <div class="input-field col s12 m4 l2 ">
+                    <select class="value " id="Feld1lAlign">
+                        <option value="left" class = "translate" >left</option>                
+                        <option value="right" class = "translate">right</option>
+                        <option value="center" class = "translate">center</option>
+                    </select>
+                    <label class="translate" for="Feld1lAlign">Feld1lAlign</label>
+                </div>
+                <div class="input-field col s12 m4 l2 ">
+                    <select class="value " id="htmlFeld2">
+                        <option value="Device" class = "translate" >Device</option>                
+                        <option value="Wert" class = "translate">Wert</option>
+                        <option value="Status" class = "translate">Status</option>
+                    </select>
+                    <label class="translate" for="htmlFeld2">htmlFeld2</label>
+                </div>
+                <div class="input-field col s12 m4 l2 ">
+                    <select class="value " id="Feld2lAlign">
+                        <option value="left" class = "translate" >left</option>                
+                        <option value="right" class = "translate">right</option>
+                        <option value="center" class = "translate">center</option>
+                    </select>
+                    <label class="translate" for="Feld2lAlign">Feld2lAlign</label>
+                </div>
+                <div class="input-field col s12 m4 l2 ">
+                    <select class="value " id="htmlFeld3">
+                        <option value="Device" class = "translate" >Device</option>                
+                        <option value="Wert" class = "translate">Wert</option>
+                        <option value="Status" class = "translate">Status</option>
+                    </select>
+                    <label class="translate" for="htmlFeld3">htmlFeld3</label>
+                </div>
+                <div class="input-field col s12 m4 l2 ">
+                    <select class="value " id="Feld3lAlign">
+                        <option value="left" class = "translate" >left</option>                
+                        <option value="right" class = "translate">right</option>
+                        <option value="center" class = "translate">center</option>
+                    </select>
+                    <label class="translate" for="Feld3lAlign">Feld3lAlign</label>
+                </div>
+            </div>
+            <div class="row">
+                
+            </div>
+            <div class="row">
+                
+            </div>
+        </div> 
+    </div>
+</div>
+</body>
+
+</html>
+
                 <!--
-//HIER DIE SPALTEN ANZAHL DEFINIEREN - jede Spalte einen Wert - in diesem Beispiel sind es 3
-
-var htmlFeld1='Device';      var Feld1lAlign="left";                     // überschrift Tabellen Spalte1 und  Ausrichtung left,right or center
-
-var htmlFeld2='Wert';        var Feld2lAlign="center";                      // überschrift Tabellen Spalte2 und  Ausrichtung left,right or center
-
-var htmlFeld3='Status';         var Feld3lAlign="center";                    // überschrift Tabellen Spalte3 und  Ausrichtung left,right or center
 
 //-----------------------------------
 //ÜBERSCHRIFT ÜBER TABELLE
@@ -292,11 +355,3 @@ const htmlSpalte1Weite="auto";                   //  Weite der ersten beiden  Sp
 
 
                     -->
-            </div>
-        
-        </div> 
-    </div>
-</div>
-</body>
-
-</html>

@@ -56,7 +56,7 @@
         "readme": "https://github.com/liv-in-sky/ioBroker.batteryload/blob/master/README.md",
         "loglevel": "info",
         "mode": "schedule",
-        "schedule": "*/30 * * * *",
+        "schedule": "* * * * *",
         "type": "general",
         "compact": true,
         "connectionType": "local",
