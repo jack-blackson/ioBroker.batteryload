@@ -75,20 +75,59 @@
     "objects": [],
     "instanceObjects": [
         {
-            "_id": "Groups",
-            "type": "channel",
-            "common": {
-                "name": "Test"
-            },
-            "native": { }
-        },
-        {
-            "_id": "Groups.1",
+            "_id": "VIS",
             "type": "state",
             "common": {
-                "name": "Test"
+                "role": "",
+                "name": "VIS",
+                "type": "string",
+                "read": true
             },
-            "native": { }
+            "native": {}
+        },
+        {
+            "_id": "Alarm",
+            "type": "state",
+            "common": {
+                "role": "",
+                "name": "Alarm",
+                "type": "integer",
+                "read": true
+            },
+            "native": {}
+        },
+        {
+            "_id": "AlarmMessage",
+            "type": "state",
+            "common": {
+                "role": "",
+                "name": "AlarmMessage",
+                "type": "string",
+                "read": true
+            },
+            "native": {}
+        },
+        {
+            "_id": "MaterialWidget",
+            "type": "state",
+            "common": {
+                "role": "",
+                "name": "MaterialWidget",
+                "type": "string",
+                "read": true
+            },
+            "native": {}
+        },
+        {
+            "_id": "MaterialWidgetTable",
+            "type": "state",
+            "common": {
+                "role": "",
+                "name": "MaterialWidgetTable",
+                "type": "string",
+                "read": true
+            },
+            "native": {}
         }
     ]
 }

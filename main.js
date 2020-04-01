@@ -126,6 +126,10 @@ let htmlColorDeviceUeberschrift="#A0C2A0"             //  Farbe der Geräte Mark
 
 let HTMLbrandSetting="b"                              // style der geräte marken:  möglich b fett; i kursiv; span normal
 
+var htmlZentriert='<center>'
+var htmlStart = ''
+var htmlTabStyle = ''
+
 //HIER SIND DIE  WERTE, DIE IN DER SCHLEIFE GEFILTERET WER%DEN - Jede spalte einen wert - jeder valx muss in dieser schleife gesetzt werden !!
 
 var val1; var val0; var val2;
@@ -162,6 +166,16 @@ function main() {
   adapter.log.info('Adapter läuft')
 
 
+
+  tabelleFinish(); // AB HIER NICHTS ÄNDERN - tabelle fertigstellen
+  adapter.setState('Alarm',AkkuAlarm.length);
+  adapter.setState('AlarmMessage',alarmMessage.toString()); AkkuMessageLengthAlt=AkkuAlarm.length;
+  alarmMessage=[];
+
+  writeHTML();
+  //writeFile(home, path ,htmlOut, function (error) { log('file written');  ?????
+  //});
+  }
 }
 
 function configHtml(){
@@ -172,8 +186,7 @@ function configHtml(){
 
     zentriert ? htmlcenterHelp="auto" : htmlcenterHelp="left";
     zentriert ? htmlcenterHelp2="center" : htmlcenterHelp2="left";
-    const htmlZentriert='<center>'
-    const htmlStart=    "<!DOCTYPE html><html lang=\"de\"><head><title>Vorlage</title><meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\">"+
+    htmlStart=    "<!DOCTYPE html><html lang=\"de\"><head><title>Vorlage</title><meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\">"+
                       "<style> * {  margin: 0;} body {background-color: "+backgroundAll+"; margin: 0 auto;  }"+
                       " p {padding-top: 10px; padding-bottom: 10px; text-align: "+htmlcenterHelp2+"}"+
                       " td { padding:"+abstandZelle+"px; border:0px solid "+htmlFarbTableBorderColor+";  border-right:"+borderHelpRight+"px solid "+htmlFarbTableBorderColor+";border-bottom:"+borderHelpBottum+"px solid "+htmlFarbTableBorderColor+";}"+ 
@@ -181,7 +194,7 @@ function configHtml(){
                       "td:nth-child(1) {width: "+htmlSpalte1Weite+"}"+"td:nth-child(2) {width:"+htmlSpalte1Weite+"}"+
                       " </style></head><body> <div>";
 
-    const htmlTabStyle= "<table bordercolor=\""+htmlFarbTableBorderColor+"\" border=\"2px\" cellspacing=\""+abstandZelle+"\" cellpadding=\""+abstandZelle+"\" width=\""+weite+"\" rules=\""+htmlRahmenLinien+"\" style=\"color:"+htmlFarbFelderschrift+";  font-size:"+htmlSchriftgroesse+
+    htmlTabStyle= "<table bordercolor=\""+htmlFarbTableBorderColor+"\" border=\"2px\" cellspacing=\""+abstandZelle+"\" cellpadding=\""+abstandZelle+"\" width=\""+weite+"\" rules=\""+htmlRahmenLinien+"\" style=\"color:"+htmlFarbFelderschrift+";  font-size:"+htmlSchriftgroesse+
                         "; font-family:"+htmlSchriftart+";background-image: linear-gradient(42deg,"+htmlFarbTableColorGradient2+","+htmlFarbTableColorGradient1+");\">";
     htmlTabUeber1="<tr height=\""+UeberSchriftHöhe+"\" style=\"color:"+htmlFarbTableColorUber+"; font-size: "+groesseUeberschrift+"px; font-weight: "+UeberschriftStyle+" ;  border-bottom: "+LinieUnterUeberschrift+"px solid "+farbeLinieUnterUeberschrift+" \">";
     htmlTabUeber3="</tr>";    
@@ -354,20 +367,17 @@ function logHomematic(){
 
       //bigBatterien 
       if (val1helper>3.2){
-        if (val1helper<=adapter.config.bigBattAlarm) 
-          {val2=adapter.config.adapter.config.symbolKO;json3=adapter.config.adapter.config.symbolKO
-        } 
-        else if (val1helper<=adapter.config.bigBattWarn && val1helper>adapter.config.bigBattAlarm) 
-            {val2=adapter.config.adapter.config.symbolWARN;json3=adapter.config.adapter.config.symbolWARN} else{val2=adapter.config.adapter.config.symbolOK;json3=adapter.config.adapter.config.symbolOK
+        if (val1helper<=adapter.config.bigBattAlarm) {
+          val2=adapter.config.adapter.config.symbolKO;json3=adapter.config.adapter.config.symbolKO
+        } else if (val1helper<=adapter.config.bigBattWarn && val1helper>adapter.config.bigBattAlarm){} 
+          val2=adapter.config.adapter.config.symbolWARN;json3=adapter.config.adapter.config.symbolWARN} else{val2=adapter.config.adapter.config.symbolOK;json3=adapter.config.adapter.config.symbolOK
         };
-        if (val1helper<=adapter.config.bigBattAlarm)
-          {val1=(" <font color=\"red\"> ")+val1helper.toFixed(1)+" V";json5="red";json2=val1helper.toFixed(1)+" V"
-        } 
-        else if (val1helper<=adapter.config.bigBattWarn && val1helper>adapter.config.bigBattAlarm) 
-          {val1=(" <font color=\"yellow\"> ")+val1helper.toFixed(1)+" V";json5="Yellow";json2=val1helper.toFixed(1)+" V"
-        } 
-        else
-          {val1=(" <font color=\"lightgreen\"> ")+(val1helper.toFixed(1))+" V";json5="lightgreen";json2=val1helper.toFixed(1)+" V"
+        if (val1helper<=adapter.config.bigBattAlarm){
+          val1=(" <font color=\"red\"> ")+val1helper.toFixed(1)+" V";json5="red";json2=val1helper.toFixed(1)+" V"
+        } else if (val1helper<=adapter.config.bigBattWarn && val1helper>adapter.config.bigBattAlarm) {
+          val1=(" <font color=\"yellow\"> ")+val1helper.toFixed(1)+" V";json5="Yellow";json2=val1helper.toFixed(1)+" V"
+        } else{
+          val1=(" <font color=\"lightgreen\"> ")+(val1helper.toFixed(1))+" V";json5="lightgreen";json2=val1helper.toFixed(1)+" V"
         };
         json3_1=Math.abs((val1helper-adapter.config.bigBattAlarm)/((5-adapter.config.bigBattAlarm))*100)
         if (val1helper<adapter.config.bigBattAlarm) AkkuAlarm.push(1);
@@ -375,46 +385,38 @@ function logHomematic(){
       }
       else {
         if (val1helper<=1.5){
-          if (val1helper<1.1) 
-            {val2=adapter.config.adapter.config.symbolKO;json3=adapter.config.adapter.config.symbolKO
-          } 
-          else if (val1helper<=1.2 && val1helper>=1.1) 
-            {val2=adapter.config.adapter.config.symbolWARN;json3=adapter.config.adapter.config.symbolWARN} else{val2=adapter.config.adapter.config.symbolOK;json3=adapter.config.adapter.config.symbolOK
+          if (val1helper<1.1) {
+            val2=adapter.config.adapter.config.symbolKO;json3=adapter.config.adapter.config.symbolKO
+          } else if (val1helper<=1.2 && val1helper>=1.1) {
+            val2=adapter.config.adapter.config.symbolWARN;json3=adapter.config.adapter.config.symbolWARN} else{val2=adapter.config.adapter.config.symbolOK;json3=adapter.config.adapter.config.symbolOK
           };
           
-          if (val1helper<1.1)
-            {val1=(" <font color=\"red\"> ")+val1helper.toFixed(1)+" V";json5="red";json2=val1helper.toFixed(1)+" V"
-          } 
-          else if (val1helper<=1.2 && val1helper>=1.1) 
-            {val1=(" <font color=\"yellow\"> ")+val1helper.toFixed(1)+" V";json5="yellow";json2=val1helper.toFixed(1)+" V"
-          } 
-          else
-            {val1=(" <font color=\"lightgreen\"> ")+val1helper.toFixed(1)+" V";json5="lightgreen";json2=val1helper.toFixed(1)+" V"
+          if (val1helper<1.1){
+            val1=(" <font color=\"red\"> ")+val1helper.toFixed(1)+" V";json5="red";json2=val1helper.toFixed(1)+" V"
+          } else if (val1helper<=1.2 && val1helper>=1.1) {
+            val1=(" <font color=\"yellow\"> ")+val1helper.toFixed(1)+" V";json5="yellow";json2=val1helper.toFixed(1)+" V"
+          } else{
+            val1=(" <font color=\"lightgreen\"> ")+val1helper.toFixed(1)+" V";json5="lightgreen";json2=val1helper.toFixed(1)+" V"
           };
           
           json3_1=Math.abs((val1helper-1.1)/((1.5-1.1))*100)
           if (val1helper<1.1) AkkuAlarm.push(1);
           if (val1helper<1.1)  alarmMessage.push(val0)
-          } 
-          else {        
-            if (val1helper<2.2) 
-              {val2=adapter.config.adapter.config.symbolKO;json3=adapter.config.adapter.config.symbolKO
-            } 
-            else if (val1helper<=2.5 && val1helper>=2.2) 
-              {val2=adapter.config.symbolWARN;json3=adapter.config.adapter.config.symbolWARN
-            } 
-            else
-              {val2=adapter.config.symbolOK;json3=adapter.config.symbolOK
+          } else {        
+            if (val1helper<2.2) {
+              val2=adapter.config.adapter.config.symbolKO;json3=adapter.config.adapter.config.symbolKO
+            } else if (val1helper<=2.5 && val1helper>=2.2) {
+              val2=adapter.config.symbolWARN;json3=adapter.config.adapter.config.symbolWARN
+            } else{
+              val2=adapter.config.symbolOK;json3=adapter.config.symbolOK
             };
 
-            if (val1helper<2.2) 
-              {val1=(" <font color=\"red\"> ")+val1helper.toFixed(1)+" V";json5="red";json2=val1helper.toFixed(1)+" V"
-            } 
-            else if (val1helper<=2.5 && val1helper>=2.2) 
-              {val1=(" <font color=\"yellow\"> ")+val1helper.toFixed(1)+" V";json5="yellow";json2=val1helper.toFixed(1)+" V"
-            } 
-            else
-              {val1=(" <font color=\"lightgreen\"> ")+val1helper.toFixed(1)+" V";json5="lightgreen";json2=val1helper.toFixed(1)+" V"
+            if (val1helper<2.2) {
+              val1=(" <font color=\"red\"> ")+val1helper.toFixed(1)+" V";json5="red";json2=val1helper.toFixed(1)+" V"
+            } else if (val1helper<=2.5 && val1helper>=2.2) {
+              val1=(" <font color=\"yellow\"> ")+val1helper.toFixed(1)+" V";json5="yellow";json2=val1helper.toFixed(1)+" V"
+            } else{
+              val1=(" <font color=\"lightgreen\"> ")+val1helper.toFixed(1)+" V";json5="lightgreen";json2=val1helper.toFixed(1)+" V"
             };
 
             json3_1=Math.abs((val1helper-2.2)/((3-2.2))*100)
@@ -428,18 +430,16 @@ function logHomematic(){
           json1=val0;
           val1help=adapter.getState(id).val;
 
-          if (val1help) 
-            {val1=(" <font color=\"red\"> ")+"low bat"; json2="low";json5="red";json3_1=0
-          } 
-          else
-            {val1=(" <font color=\"lightgreen\"> ")+"full bat";json2="high";json5="green";json3_1=100
+          if (val1help) {
+            val1=(" <font color=\"red\"> ")+"low bat"; json2="low";json5="red";json3_1=0
+          } else{
+            val1=(" <font color=\"lightgreen\"> ")+"full bat";json2="high";json5="green";json3_1=100
           } 
 
-          if (val1help) 
-            {val2=adapter.config.symbolKO;json3=adapter.config.symbolKO
-          } 
-          else
-            {val2=adapter.config.symbolOK;json3=adapter.config.symbolKO
+          if (val1help) {
+            val2=adapter.config.symbolKO;json3=adapter.config.symbolKO
+          } else{
+            val2=adapter.config.symbolOK;json3=adapter.config.symbolKO
           }         
           if (val1help) AkkuAlarm.push(1);
           if (val1help)  alarmMessage.push(val0);
@@ -459,8 +459,8 @@ function logHomematic(){
 
       var ida = id.split('.');
 
-      if (!adapter.config.filterArray.includes(id) && !arrDoppelt.includes(ida[0]+"."+ida[1]+"."+ida[2]) ) 
-        {val0=adapter.getObject(ida[0]+"."+ida[1]+"."+ida[2]).common.name                     
+      if (!adapter.config.filterArray.includes(id) && !arrDoppelt.includes(ida[0]+"."+ida[1]+"."+ida[2]) ) {
+        val0=adapter.getObject(ida[0]+"."+ida[1]+"."+ida[2]).common.name                     
         var ida = val0.split('.');
         val0=ida[0].replace(/:.+/g,"");
         json1=val0;     
@@ -468,21 +468,18 @@ function logHomematic(){
 
         if(typeof adapter.getState(id).val!="number"){  
           if (val1help) {val1=(" <font color=\"red\"> ")+"low bat"; json2="low";json5="red";json3_1=0
+          } else{
+            val1=(" <font color=\"lightgreen\"> ")+"full bat";json2="high";json5="green";json3_1=100
           } 
-          else
-            {val1=(" <font color=\"lightgreen\"> ")+"full bat";json2="high";json5="green";json3_1=100
-          } 
-          if (val1help) 
-            {val2="<font color=\"red\">"+adapter.config.symbolKO;json3=adapter.config.symbolKO
-          } 
-          else
-            {val2=adapter.config.symbolOK;json3=adapter.config.symbolKO
+          if (val1help) {
+            val2="<font color=\"red\">"+adapter.config.symbolKO;json3=adapter.config.symbolKO
+          } else {
+            val2=adapter.config.symbolOK;json3=adapter.config.symbolKO
           }
           if (val1help) AkkuAlarm.push(1);
           if (val1help)  alarmMessage.push(val0);     
-        } 
-        else 
-          {val1=(" <font color=\"yellow\"> ")+"no bat val"; json2="no bat val";json5="yellow";json3_1=0;val2="<font color=\"yellow\">"+adapter.config.symbolWARN;json3=adapter.config.symbolWARN; 
+        } else {
+          val1=(" <font color=\"yellow\"> ")+"no bat val"; json2="no bat val";json5="yellow";json3_1=0;val2="<font color=\"yellow\">"+adapter.config.symbolWARN;json3=adapter.config.symbolWARN; 
         }
 
         json6="HOMEMATIC"
@@ -520,12 +517,12 @@ function makeJsonWidget(vax1,vax2,vax3,vax4,vax5,vax6,vax3_1) {
       helpSort : vax3_1
   });
 
-let mysubText = `<div style="display: flex; flex-direction: row; line-height: 1.3; padding-left: 1px; padding-right: 8px; align-items: center;">
+  let mysubText = `<div style="display: flex; flex-direction: row; line-height: 1.3; padding-left: 1px; padding-right: 8px; align-items: center;">
                              <div style="flex: 1;">${vax2}</div>
                              <div style="color: grey; font-size: 16px; font-family: RobotoCondensed-LightItalic; text-align: right;">${vax6}</div>
                          </div>`
 
-myJsonWidget2.push({
+  myJsonWidget2.push({
               text: vax1,
               subText: mysubText,
               statusBarColor: vax5,
@@ -538,7 +535,7 @@ myJsonWidget2.push({
               Wert : vax2,
               Hersteller : vax4,
               helpSort : vax3_1
-          });
+    });
 }
 
 
@@ -559,6 +556,59 @@ function sortierMal(myObjF) {
     tabelleBind(); 
   } 
 }
+
+
+function tabelleFinish() {
+  switch (mehrfachTabelle) {  
+    case 1:    
+            break;
+    case 2:    
+            if(counter%2==0)  htmlOut = htmlOut.replace(/<\/td>$/, '</td><td>&ensp;</td><td>&ensp;</td><td>&ensp;</td></tr>');
+            break;
+    case 3:   
+            if(counter%3==2)  htmlOut = htmlOut.replace(/<\/td>$/, "</td></tr>");
+            if(counter%3==1)  htmlOut = htmlOut.replace(/<\/td>$/, "</td><td>&ensp;</td><td>&ensp;</td><td>&ensp;</td></tr>");        
+            if(counter%3==0)  htmlOut = htmlOut.replace(/<\/td>$/, "</td><td>&ensp;</td><td>&ensp;</td><td  style=\" border-right: "+trennungsLinie+"px solid "+farbetrennungsLinie+"\">&ensp;</td><td>&ensp;</td><td>&ensp;</td><td>&ensp;</td></tr>");
+            break;
+    case 4: 
+            if(counter%4==3)  htmlOut = htmlOut.replace(/<\/td>$/, "</td></tr>");
+            if(counter%4==2)  htmlOut = htmlOut.replace(/<\/td>$/, "</td><td>&ensp;</td><td>&ensp;</td><td>&ensp;</td></tr>");
+            if(counter%4==1)  htmlOut = htmlOut.replace(/<\/td>$/, "</td><td>&ensp;</td><td>&ensp;</td><td style=\" border-right: "+trennungsLinie+"px solid "+farbetrennungsLinie+"\">&ensp;</td><td>&ensp;</td><td>&ensp;</td><td>&ensp;</td></tr>");    
+            if(counter%4==0)  htmlOut = htmlOut.replace(/<\/td>$/, "</td><td>&ensp;</td><td>&ensp;</td><td style=\" border-right: "+trennungsLinie+"px solid "+farbetrennungsLinie+"\">&ensp;</td><td>&ensp;</td><td>&ensp;</td><td style=\" border-right: "+trennungsLinie+"px solid "+farbetrennungsLinie+"\">&ensp;</td><td>&ensp;</td><td>&ensp;</td><td>&ensp;</td></tr>");      
+            break; 
+  }
+  var htmlUeber=    "<p style=\"color:"+htmlFarbUber+"; font-family:"+htmlSchriftart+"; font-size: "+htmlÜberFontGroesse+"; font-weight:"+htmlSchriftWeite+ "\">"+htmlFeldUeber+"&ensp;&ensp;Last Update: "+ adapter.formatDate(adapter.getDateObject((parseFloat((new Date().getTime())))), "SS:mm:ss");+"</p>"; 
+  var htmlUnter= "<div  style=\"color:"+htmlFarbUber+"; font-family:"+htmlSchriftart+"; font-size: 70%; text-align: right;\" >"+htmlFeldUeber+"&ensp;&ensp;Last Update: "+ formatDate(getDateObject((parseFloat((new Date().getTime())))), "SS:mm:ss");+"</div>";
+  
+  if (!htmlSignature) htmlUnter="";
+  
+  //Ausgabe über VIS html widget - tabelle in datenpunkt schreiben - html tabelle ohne html header und body
+  var htmlOutVIS="";
+    
+  if (htmlUberschrift) { 
+    zentriert ? htmlOutVIS=htmlZentriert+htmlUeber+htmlTabStyle+htmlTabUeber+htmlOut+"</table>"+htmlUnter : htmlOutVIS=htmlUeber+htmlTabStyle+htmlTabUeber+htmlOut+"</table>"+htmlUnter ;      
+  } else {
+    zentriert ?  htmlOutVIS=htmlZentriert+htmlTabStyle+htmlTabUeber+htmlOut+"</table>"+htmlUnter :  htmlOutVIS=htmlTabStyle+htmlTabUeber+htmlOut+"</table>"+htmlUnter;
+  }
+   // log("bin raus aus tabelleBind");
+  
+  adapter.setState('VIS', htmlOutVIS );
+    
+  var htmlUnter= "<div  style=\"color:"+htmlFarbUber+"; font-family:"+htmlSchriftart+"; font-size: 80%;  text-align: center; \" >"+htmlFeldUeber+"&ensp;&ensp;Last Update: "+formatDate(getDateObject((parseFloat((new Date().getTime())))), "SS:mm:ss");+"</div>"
+  
+  if (!htmlSignature) htmlUnter="";
+  
+  var htmlEnd="</table>"+htmlUnter+"</div></body>";
+    
+  htmlUberschrift ? htmlOut=htmlStart+htmlUeber+htmlTabStyle+htmlTabUeber+htmlOut+htmlEnd : htmlOut=htmlStart+htmlTabStyle+htmlTabUeber+htmlOut+htmlEnd;
+  
+  adapter.setState('MaterialWidger',JSON.stringify(myJsonWidget2)); 
+  myJsonWidget2=[];
+  adapter.setState('MaterialWidgetTable',JSON.stringify(myJsonWidget)); 
+  myJsonWidget=[];
+}
+
+
 
 //Original Script: 
 /*
@@ -2416,180 +2466,13 @@ $('iogo.*.*.battery.level').each(function(id, i) {           // hier eigene schl
 
  
 
-     tabelleFinish(); // AB HIER NICHTS ÄNDERN - tabelle fertigstellen
-
- 
-
- 
-
-    setState(dpAlarm,AkkuAlarm.length);
-
-    setState(dpAlarmMessage,alarmMessage.toString()); AkkuMessageLengthAlt=AkkuAlarm.length;
-
- 
-
-    alarmMessage=[];
-
-    
-
-        
-
-} // function ende
-
- 
-
-//MAIN:
-
- 
-
-schedule(mySchedule,  function () { 
-
-writeHTML();
-
-if (braucheEinFile) {writeFile(home, path ,htmlOut, function (error) { /* log('file written');  });}
-
+     
 }); 
 
 writeHTML();  
 
 if (braucheEinFile) {writeFile(home, path ,htmlOut, function (error) { /* log('file written');  });}                                 //     <tdalign style=\" border-right: "+trennungsLinie+"px solid "+farbetrennungsLinie+
 
-                                                         
-
-
-
- 
-
- 
-
-  
- 
-
-
-
- 
-
- 
-
- 
-
-function tabelleFinish() {
-
- 
-
-switch (mehrfachTabelle) {  
-
-        case 1:    break;
-
- 
-
-        case 2:    
-
-                   if(counter%2==0)  htmlOut = htmlOut.replace(/<\/td>$/, '</td><td>&ensp;</td><td>&ensp;</td><td>&ensp;</td></tr>');
-
-                 
-
-                   break;
-
- 
-
-        case 3:   if(counter%3==2)  htmlOut = htmlOut.replace(/<\/td>$/, "</td></tr>");
-
-                  if(counter%3==1)  htmlOut = htmlOut.replace(/<\/td>$/, "</td><td>&ensp;</td><td>&ensp;</td><td>&ensp;</td></tr>");        
-
-                  if(counter%3==0)      htmlOut = htmlOut.replace(/<\/td>$/, "</td><td>&ensp;</td><td>&ensp;</td><td  style=\" border-right: "+trennungsLinie+"px solid "+farbetrennungsLinie+"\">&ensp;</td><td>&ensp;</td><td>&ensp;</td><td>&ensp;</td></tr>");
-
-                
-
-                   break;
-
-        case 4:   if(counter%4==3)  htmlOut = htmlOut.replace(/<\/td>$/, "</td></tr>");
-
-                  if(counter%4==2)  htmlOut = htmlOut.replace(/<\/td>$/, "</td><td>&ensp;</td><td>&ensp;</td><td>&ensp;</td></tr>");
-
-                  if(counter%4==1)  htmlOut = htmlOut.replace(/<\/td>$/, "</td><td>&ensp;</td><td>&ensp;</td><td style=\" border-right: "+trennungsLinie+"px solid "+farbetrennungsLinie+"\">&ensp;</td><td>&ensp;</td><td>&ensp;</td><td>&ensp;</td></tr>");    
-
-                  if(counter%4==0)  htmlOut = htmlOut.replace(/<\/td>$/, "</td><td>&ensp;</td><td>&ensp;</td><td style=\" border-right: "+trennungsLinie+"px solid "+farbetrennungsLinie+"\">&ensp;</td><td>&ensp;</td><td>&ensp;</td><td style=\" border-right: "+trennungsLinie+"px solid "+farbetrennungsLinie+"\">&ensp;</td><td>&ensp;</td><td>&ensp;</td><td>&ensp;</td></tr>");      
-
-                  break; }
-
-    
-
-        var htmlUeber=    "<p style=\"color:"+htmlFarbUber+"; font-family:"+htmlSchriftart+"; font-size: "+htmlÜberFontGroesse+"; font-weight:"+htmlSchriftWeite+ "\">"+htmlFeldUeber+"&ensp;&ensp;Last Update: "+formatDate(getDateObject((parseFloat((new Date().getTime())))), "SS:mm:ss");+"</p>"; 
-
-      var htmlUnter= "<div  style=\"color:"+htmlFarbUber+"; font-family:"+htmlSchriftart+"; font-size: 70%; text-align: right;\" >"+htmlFeldUeber+"&ensp;&ensp;Last Update: "+formatDate(getDateObject((parseFloat((new Date().getTime())))), "SS:mm:ss");+"</div>";
-
-       
-
-       if (!htmlSignature) htmlUnter="";
-
-         //Ausgabe über VIS html widget - tabelle in datenpunkt schreiben - html tabelle ohne html header und body
-
-          var htmlOutVIS="";
-
-        //  htmlUberschrift ? htmlOutVIS=htmlUeber+htmlTabStyle+htmlTabUeber+htmlOut+"</table>" : htmlOutVIS=htmlTabStyle+htmlTabUeber+htmlOut+"</table>";
-
-           if (htmlUberschrift) 
-
-               { zentriert ? htmlOutVIS=htmlZentriert+htmlUeber+htmlTabStyle+htmlTabUeber+htmlOut+"</table>"+htmlUnter : htmlOutVIS=htmlUeber+htmlTabStyle+htmlTabUeber+htmlOut+"</table>"+htmlUnter ;
-
- 
-
-             } else {
-
-              zentriert ?  htmlOutVIS=htmlZentriert+htmlTabStyle+htmlTabUeber+htmlOut+"</table>"+htmlUnter :  htmlOutVIS=htmlTabStyle+htmlTabUeber+htmlOut+"</table>"+htmlUnter;
-
- 
-
-                }
-
-                
-
- 
-
- // log("bin raus aus tabelleBind");
-
-          if (braucheEinVISWidget) setState(dpVIS, htmlOutVIS );
-
-          //console.log dpVIS;
-
- 
-
-var htmlUnter= "<div  style=\"color:"+htmlFarbUber+"; font-family:"+htmlSchriftart+"; font-size: 80%;  text-align: center; \" >"+htmlFeldUeber+"&ensp;&ensp;Last Update: "+formatDate(getDateObject((parseFloat((new Date().getTime())))), "SS:mm:ss");+"</div>"
-
- 
-
-if (!htmlSignature) htmlUnter="";
-
- var htmlEnd="</table>"+htmlUnter+"</div></body>";
-
-//mit oder ohne überschrift - zentriert oder links
-
-htmlUberschrift ? htmlOut=htmlStart+htmlUeber+htmlTabStyle+htmlTabUeber+htmlOut+htmlEnd : htmlOut=htmlStart+htmlTabStyle+htmlTabUeber+htmlOut+htmlEnd;
-
-//log(htmlOut);
-
- if (braucheMaterialDesignWidget) {
-
-      
-
-        setState(dpMaterialWidget,JSON.stringify(myJsonWidget2)); 
-
-        myJsonWidget2=[];
-
-}
-
-if (braucheMaterialDesignWidgetTable) {
-
-   
-
-   setState(dpMaterialWidgetTable,JSON.stringify(myJsonWidget)); 
-
-      myJsonWidget=[];
-
-}
-
-}
 
 
 */
