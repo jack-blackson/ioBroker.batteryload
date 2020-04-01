@@ -1,8 +1,5 @@
 <html>
-
 <head>
-
-    <!-- Load ioBroker scripts and styles-->
     <link rel="stylesheet" type="text/css" href="../../css/adapter.css" />
     <link rel="stylesheet" type="text/css" href="../../lib/css/materialize.css">
 
@@ -13,24 +10,45 @@
     <script type="text/javascript" src="../../lib/js/materialize.js"></script>
     <script type="text/javascript" src="../../js/adapter-settings.js"></script>
 
-    <!-- Load our own files -->
     <link rel="stylesheet" type="text/css" href="style.css" />
     <script type="text/javascript" src="words.js"></script>
 
     <script type="text/javascript">
-        // This will be called by the admin adapter when the settings page loads
         function load(settings, onChange) {
+            if (!settings) return;
+            $('.value').each(function () {
+                var key = $(this).attr('id');
+                var $key = $('#' + key + '.value');
+                if ($key.attr('type') === 'checkbox') {
+                    $key.prop('checked', settings[key]).change(function () {
+                        onChange();
+                    });
+                } else {
+                    $key.val(settings[key]).change(function () {
+                        onChange();
+                    }).keyup(function () {
+                        onChange();
+                    });
+                }
+            });
             onChange(false);
-            // reinitialize all the Materialize labels on the page if you are dynamically adding inputs:
-            if (M) M.updateTextFields();
         }
 
-        // This will be called by the admin adapter when the user presses the save button
+
         function save(callback) {
             var obj = {};
-
+            $('.value').each(function () {
+                var $this = $(this);
+                var id = $this.attr('id');
+                if ($this.attr('type') === 'checkbox') {
+                    obj[$this.attr('id')] = $this.prop('checked');
+                } else {
+                    obj[$this.attr('id')] = $this.val();
+                }
+            });
             callback(obj);
         }
+
     </script>
 
 </head>
@@ -275,81 +293,7 @@
 
                 <!--
 
-//-----------------------------------
-//ÜBERSCHRIFT ÜBER TABELLE
 
-
-let   htmlUberschrift=true;                           // mit Überschrift über der tabelle
-
-let   htmlSignature=false;                              // anstatt der Überscghrift eine signature: - kleiner - anliegend
-
-const htmlFeldUeber='Batterie Zustand Sensoren';              // Überschrift und Signature
-
-const htmlFarbUber="white";                         // Farbe der Überschrift
-
-const htmlSchriftWeite="normal";                       // bold, normal - Fettschrift für Überschrift
-
-const htmlÜberFontGroesse="22px";                       // schriftgröße überschrift
-
-//MEHRERE TABELLEN NEBENEINANDER
-
-let   mehrfachTabelle=3;                              // bis zu 4 Tabellen werden nebeneinander geschrieben-  verkürzt das Ganze, dafür etwas breiter - MÖGLICH 1,2,3,oder 4 !!!
-
-const trennungsLinie="2";                             //extra trennungslinie bei mehrfachtabellen - evtl auf 0 stellen, wnn htmlRahmenLinien auf none sind
-
-const farbetrennungsLinie="white";
-
-const htmlFarbZweiteTabelle="white";                // Farbe der Überschrift bei jeder 2.ten Tabelle
-
-const htmlFarbTableColorUber="#BDBDBD";               // Überschrift in der tabelle - der einzelnen Spalten
-
-//ÜBERSCHRIFT SPALTEN
-
-const UeberSchriftHöhe="35";                          //Überschrift bekommt mehr Raum - darunter und darüber - Zellenhöhe
-
-const LinieUnterUeberschrift="3";                   // Linie nur unter Spaltenüberschrift - 
-
-const farbeLinieUnterUeberschrift="white";
-
-const groesseUeberschrift=20;
-
-const UeberschriftStyle="normal"                     // möglich "bold"
-
-//GANZE TABELLE
-
-let abstandZelle="3";
-
-let farbeUngeradeZeilen="#000000";                     //Farbe für ungerade Zeilenanzahl - Hintergrund der Spaltenüberschrift bleibt bei htmlFarbTableColorGradient1/2
-
-let farbeGeradeZeilen="#151515";                        //Farbe für gerade Zeilenanzahl - Hintergrund der Spaltenüberschrift bleibt bei htmlFarbTableColorGradient1/2
-
-let weite="auto";                                     //Weite der Tabelle
-
-let zentriert=true;                                   //ganze tabelle zentriert
-
-const backgroundAll="#000000";                        //Hintergrund für die ganze Seite - für direkten aufruf oder iqontrol sichtber - keine auswirkung auf vis-widget
-
-const htmlSchriftart="RobotoCondensed-Regular"  //"Helvetica";
-
-const htmlSchriftgroesse="18px";
-
-//FELDER UND RAHMEN
-
-let   UeberschriftSpalten=true;                // ein- oder ausblenden der spatlen-überschriften
-
-const htmlFarbFelderschrift="#6E6E6E";                  // SchriftFarbe der Felder
-
-const htmlFarbFelderschrift2="#585858";                 // SchriftFarbe der Felder für jede 2te Tabelle
-
-const htmlFarbTableColorGradient1="#424242";          //  Gradient - Hintergrund der Tabelle - Verlauffarbe
-
-const htmlFarbTableColorGradient2="#424242";          //  Gradient - Hintergrund der Tabelle - ist dieser Wert gleich Gradient1 gibt es keinen verlauf
-
-const htmlFarbTableBorderColor="grey";             // Farbe des Rahmen - is tdieser gleich den gradienten, sind die rahmen unsichtbar
-
-let htmlRahmenLinien="rows";                            // Format für Rahmen: MÖGLICH: "none" oder "all" oder "cols" oder "rows"
-
-const htmlSpalte1Weite="auto";                   //  Weite der ersten beiden  Spalten oder z.b. 115px
 
  
 

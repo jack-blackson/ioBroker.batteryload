@@ -328,7 +328,6 @@ function loopDevices(){
   if (adapter.config.homematic){
     logHomematic()
   }
-  adapter.terminate ? adapter.terminate(0) : process.exit(0);
 
 }
 
@@ -382,83 +381,80 @@ function logHomematic(){
         json3_1=Math.abs((val1helper-adapter.config.bigBattAlarm)/((5-adapter.config.bigBattAlarm))*100)
         if (val1helper<adapter.config.bigBattAlarm) AkkuAlarm.push(1);
         if (val1helper<=adapter.config.bigBattAlarm)  alarmMessage.push(val0);
-      }
-      else {
-        if (val1helper<=1.5){
-          if (val1helper<1.1) {
-            val2=adapter.config.adapter.config.symbolKO;json3=adapter.config.adapter.config.symbolKO
-          } else if (val1helper<=1.2 && val1helper>=1.1) {
-            val2=adapter.config.adapter.config.symbolWARN;json3=adapter.config.adapter.config.symbolWARN} else{val2=adapter.config.adapter.config.symbolOK;json3=adapter.config.adapter.config.symbolOK
-          };
+    }
+    else {
+      if (val1helper<=1.5){
+        if (val1helper<1.1) {
+          val2=adapter.config.adapter.config.symbolKO;json3=adapter.config.adapter.config.symbolKO
+        } else if (val1helper<=1.2 && val1helper>=1.1) {
+          val2=adapter.config.adapter.config.symbolWARN;json3=adapter.config.adapter.config.symbolWARN} else{val2=adapter.config.adapter.config.symbolOK;json3=adapter.config.adapter.config.symbolOK
+        };
           
-          if (val1helper<1.1){
+        if (val1helper<1.1){
+          val1=(" <font color=\"red\"> ")+val1helper.toFixed(1)+" V";json5="red";json2=val1helper.toFixed(1)+" V"
+        } else if (val1helper<=1.2 && val1helper>=1.1) {
+          val1=(" <font color=\"yellow\"> ")+val1helper.toFixed(1)+" V";json5="yellow";json2=val1helper.toFixed(1)+" V"
+        } else{
+          val1=(" <font color=\"lightgreen\"> ")+val1helper.toFixed(1)+" V";json5="lightgreen";json2=val1helper.toFixed(1)+" V"
+        };
+          
+        json3_1=Math.abs((val1helper-1.1)/((1.5-1.1))*100)
+        if (val1helper<1.1) AkkuAlarm.push(1);
+        if (val1helper<1.1)  alarmMessage.push(val0)
+        } else {        
+          if (val1helper<2.2) {
+            val2=adapter.config.adapter.config.symbolKO;json3=adapter.config.adapter.config.symbolKO
+          } else if (val1helper<=2.5 && val1helper>=2.2) {
+            val2=adapter.config.symbolWARN;json3=adapter.config.adapter.config.symbolWARN
+          } else{
+            val2=adapter.config.symbolOK;json3=adapter.config.symbolOK
+          };
+
+          if (val1helper<2.2) {
             val1=(" <font color=\"red\"> ")+val1helper.toFixed(1)+" V";json5="red";json2=val1helper.toFixed(1)+" V"
-          } else if (val1helper<=1.2 && val1helper>=1.1) {
+          } else if (val1helper<=2.5 && val1helper>=2.2) {
             val1=(" <font color=\"yellow\"> ")+val1helper.toFixed(1)+" V";json5="yellow";json2=val1helper.toFixed(1)+" V"
           } else{
             val1=(" <font color=\"lightgreen\"> ")+val1helper.toFixed(1)+" V";json5="lightgreen";json2=val1helper.toFixed(1)+" V"
           };
-          
-          json3_1=Math.abs((val1helper-1.1)/((1.5-1.1))*100)
-          if (val1helper<1.1) AkkuAlarm.push(1);
-          if (val1helper<1.1)  alarmMessage.push(val0)
-          } else {        
-            if (val1helper<2.2) {
-              val2=adapter.config.adapter.config.symbolKO;json3=adapter.config.adapter.config.symbolKO
-            } else if (val1helper<=2.5 && val1helper>=2.2) {
-              val2=adapter.config.symbolWARN;json3=adapter.config.adapter.config.symbolWARN
-            } else{
-              val2=adapter.config.symbolOK;json3=adapter.config.symbolOK
-            };
 
-            if (val1helper<2.2) {
-              val1=(" <font color=\"red\"> ")+val1helper.toFixed(1)+" V";json5="red";json2=val1helper.toFixed(1)+" V"
-            } else if (val1helper<=2.5 && val1helper>=2.2) {
-              val1=(" <font color=\"yellow\"> ")+val1helper.toFixed(1)+" V";json5="yellow";json2=val1helper.toFixed(1)+" V"
-            } else{
-              val1=(" <font color=\"lightgreen\"> ")+val1helper.toFixed(1)+" V";json5="lightgreen";json2=val1helper.toFixed(1)+" V"
-            };
-
-            json3_1=Math.abs((val1helper-2.2)/((3-2.2))*100)
-            if (val1helper<2.2) AkkuAlarm.push(1);
-            if (val1helper<2.2)  alarmMessage.push(val0);}}
-        } 
-        else 
-          {val0=adapter.getObject(id).common.name ; 
-          var ida = val0.split('.');
-          val0=ida[0].replace(/:.+/g,"");
-          json1=val0;
-          val1help=adapter.getState(id).val;
-
-          if (val1help) {
-            val1=(" <font color=\"red\"> ")+"low bat"; json2="low";json5="red";json3_1=0
-          } else{
-            val1=(" <font color=\"lightgreen\"> ")+"full bat";json2="high";json5="green";json3_1=100
-          } 
-
-          if (val1help) {
-            val2=adapter.config.symbolKO;json3=adapter.config.symbolKO
-          } else{
-            val2=adapter.config.symbolOK;json3=adapter.config.symbolKO
-          }         
-          if (val1help) AkkuAlarm.push(1);
-          if (val1help)  alarmMessage.push(val0);
+          json3_1=Math.abs((val1helper-2.2)/((3-2.2))*100)
+          if (val1helper<2.2) AkkuAlarm.push(1);
+          if (val1helper<2.2)  alarmMessage.push(val0);
         }
+      }
+    } else {
+      val0=adapter.getObject(id).common.name ; 
+      var ida = val0.split('.');
+      val0=ida[0].replace(/:.+/g,"");
+      json1=val0;
+      val1help=adapter.getState(id).val;
 
-        json3=val2;
-        json6="HOMEMATIC"
+      if (val1help) {
+        val1=(" <font color=\"red\"> ")+"low bat"; json2="low";json5="red";json3_1=0
+      } else{
+        val1=(" <font color=\"lightgreen\"> ")+"full bat";json2="high";json5="green";json3_1=100
+      } 
 
-        json4=pfadBilder+"homematic.png"
-        makeJsonWidget(json1,json2,json3,json4,json5,json6,json3_1);
-        let help=[val0,val1,val2]; myObjF.push(help);
+      if (val1help) {
+        val2=adapter.config.symbolKO;json3=adapter.config.symbolKO
+      } else{
+        val2=adapter.config.symbolOK;json3=adapter.config.symbolKO
+      }         
+      if (val1help) AkkuAlarm.push(1);
+      if (val1help)  alarmMessage.push(val0);
     }
 
+    json3=val2;
+    json6="HOMEMATIC"
+
+    json4=pfadBilder+"homematic.png"
+    makeJsonWidget(json1,json2,json3,json4,json5,json6,json3_1);
+    let help=[val0,val1,val2]; myObjF.push(help);
   });
 
   $('hm-rpc.*.*.0.LOWBAT').each(function(id, i) {           // hier eigene schleife definieren und den wert counter++ nicht vergessen  !!!
-
       var ida = id.split('.');
-
       if (!adapter.config.filterArray.includes(id) && !arrDoppelt.includes(ida[0]+"."+ida[1]+"."+ida[2]) ) {
         val0=adapter.getObject(ida[0]+"."+ida[1]+"."+ida[2]).common.name                     
         var ida = val0.split('.');
@@ -606,6 +602,10 @@ function tabelleFinish() {
   myJsonWidget2=[];
   adapter.setState('MaterialWidgetTable',JSON.stringify(myJsonWidget)); 
   myJsonWidget=[];
+
+  // Adapter erfolgreich durchgeführt
+  adapter.terminate ? adapter.terminate(0) : process.exit(0);
+
 }
 
 
