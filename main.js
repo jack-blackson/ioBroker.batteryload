@@ -164,7 +164,7 @@ function startAdapter(options) {
 function main() {
   configHtml()
   adapter.log.info('Adapter läuft')
-
+  loopDevices()
 
 
   tabelleFinish(); // AB HIER NICHTS ÄNDERN - tabelle fertigstellen
