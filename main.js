@@ -1,6 +1,7 @@
 "use strict";
 const utils = require("@iobroker/adapter-core");
 const tools = require("./lib/tools");
+const moment = require('moment');
 
 let adapter;
 
@@ -21,7 +22,7 @@ const htmlSchriftWeite="normal";                       // bold, normal - Fettsch
 
 const htmlÜberFontGroesse="22px";                       // schriftgröße überschrift
 
-let pfadBilder = '\admin\img\'
+let pfadBilder = "/admin/img/"
 
 //MEHRERE TABELLEN NEBENEINANDER
 
@@ -165,17 +166,17 @@ function main() {
   configHtml()
   adapter.log.info('Adapter läuft')
   loopDevices()
+  //writeHTML();
 
 
-  tabelleFinish(); // AB HIER NICHTS ÄNDERN - tabelle fertigstellen
+  //tabelleFinish(); // AB HIER NICHTS ÄNDERN - tabelle fertigstellen
   adapter.setState('Alarm',AkkuAlarm.length);
   adapter.setState('AlarmMessage',alarmMessage.toString()); AkkuMessageLengthAlt=AkkuAlarm.length;
   alarmMessage=[];
 
-  writeHTML();
   //writeFile(home, path ,htmlOut, function (error) { log('file written');  ?????
   //});
-  }
+  
 }
 
 function configHtml(){
@@ -320,11 +321,12 @@ function writeHTML(){
   };   
 
   if (!UeberschriftSpalten) {htmlTabUeber=""} 
-  loopDevices()
 }
 
 function loopDevices(){
   //homematic
+  adapter.log.info('Starte loop device')
+
   if (adapter.config.homematic){
     logHomematic()
   }
@@ -332,6 +334,8 @@ function loopDevices(){
 }
 
 function logHomematic(){
+  adapter.log.info('Starte homematic')
+
   tabelleMachSchoen()
   counter=-1
   for(var i=0;i<mehrfachTabelle;i++ ) {
@@ -485,6 +489,8 @@ function logHomematic(){
     } 
   });
   sortierMal(myObjF);
+  adapter.log.info('Beende homematic')
+
 }
 
 function tabelleMachSchoen() {
@@ -555,6 +561,8 @@ function sortierMal(myObjF) {
 
 
 function tabelleFinish() {
+  adapter.log.info('starte Tabellefinisht')
+
   switch (mehrfachTabelle) {  
     case 1:    
             break;
@@ -573,8 +581,8 @@ function tabelleFinish() {
             if(counter%4==0)  htmlOut = htmlOut.replace(/<\/td>$/, "</td><td>&ensp;</td><td>&ensp;</td><td style=\" border-right: "+trennungsLinie+"px solid "+farbetrennungsLinie+"\">&ensp;</td><td>&ensp;</td><td>&ensp;</td><td style=\" border-right: "+trennungsLinie+"px solid "+farbetrennungsLinie+"\">&ensp;</td><td>&ensp;</td><td>&ensp;</td><td>&ensp;</td></tr>");      
             break; 
   }
-  var htmlUeber=    "<p style=\"color:"+htmlFarbUber+"; font-family:"+htmlSchriftart+"; font-size: "+htmlÜberFontGroesse+"; font-weight:"+htmlSchriftWeite+ "\">"+htmlFeldUeber+"&ensp;&ensp;Last Update: "+ adapter.formatDate(adapter.getDateObject((parseFloat((new Date().getTime())))), "SS:mm:ss");+"</p>"; 
-  var htmlUnter= "<div  style=\"color:"+htmlFarbUber+"; font-family:"+htmlSchriftart+"; font-size: 70%; text-align: right;\" >"+htmlFeldUeber+"&ensp;&ensp;Last Update: "+ formatDate(getDateObject((parseFloat((new Date().getTime())))), "SS:mm:ss");+"</div>";
+  var htmlUeber=    "<p style=\"color:"+htmlFarbUber+"; font-family:"+htmlSchriftart+"; font-size: "+htmlÜberFontGroesse+"; font-weight:"+htmlSchriftWeite+ "\">"+htmlFeldUeber+"&ensp;&ensp;Last Update: "+   moment(Date(), 'SS:mm:ss')  +"</p>"; 
+  var htmlUnter= "<div  style=\"color:"+htmlFarbUber+"; font-family:"+htmlSchriftart+"; font-size: 70%; text-align: right;\" >"+htmlFeldUeber+"&ensp;&ensp;Last Update: "+ moment(Date(), 'SS:mm:ss') +"</div>";
   
   if (!htmlSignature) htmlUnter="";
   
@@ -590,7 +598,7 @@ function tabelleFinish() {
   
   adapter.setState('VIS', htmlOutVIS );
     
-  var htmlUnter= "<div  style=\"color:"+htmlFarbUber+"; font-family:"+htmlSchriftart+"; font-size: 80%;  text-align: center; \" >"+htmlFeldUeber+"&ensp;&ensp;Last Update: "+formatDate(getDateObject((parseFloat((new Date().getTime())))), "SS:mm:ss");+"</div>"
+  var htmlUnter= "<div  style=\"color:"+htmlFarbUber+"; font-family:"+htmlSchriftart+"; font-size: 80%;  text-align: center; \" >"+htmlFeldUeber+"&ensp;&ensp;Last Update: "+ moment(Date(), 'SS:mm:ss') +"</div>"
   
   if (!htmlSignature) htmlUnter="";
   
